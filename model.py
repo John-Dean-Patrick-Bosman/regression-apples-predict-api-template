@@ -66,7 +66,7 @@ def _preprocess_data(data):
     #model_test = test.loc[test['Commodities'] == 'APPLE GOLDEN DELICIOUS']
     #feature_vector_df = train.loc[train['Commodities'] == 'APPLE GOLDEN DELICIOUS']
     #predict_structure = feature_vector_df[['avg_price_per_kg','Weight_Kg']]
-    model_test = df_test.loc[df_test['Commodities'] == 'APPLE GOLDEN DELICIOUS']
+    model_test = feature_vector_df.loc[feature_vector_df['Commodities'] == 'APPLE GOLDEN DELICIOUS']
 
     model_test = model_test.drop('Commodities',axis=1)
 

@@ -27,6 +27,7 @@ import pandas as pd
 import pickle
 import json
 
+
 def _preprocess_data(data):
     """Private helper function to preprocess data for model prediction.
 
@@ -85,7 +86,6 @@ def _preprocess_data(data):
     model_test =  pd.get_dummies(model_test, drop_first = True, columns=['Harvest_Season'])
     model_test = model_test.drop('Index',axis=1)
     
-    model_test.head()
                                 
     # ------------------------------------------------------------------------
 

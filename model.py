@@ -62,34 +62,36 @@ def _preprocess_data(data):
     # ---------------------------------------------------------------
 
     # ----------- Replace this code with your own preprocessing steps --------
-    
-    #model_train = train.loc[train['Commodities'] == 'APPLE GOLDEN DELICIOUS']
-    #model_test = test.loc[test['Commodities'] == 'APPLE GOLDEN DELICIOUS']
-    #feature_vector_df = train.loc[train['Commodities'] == 'APPLE GOLDEN DELICIOUS']
-    #predict_structure = feature_vector_df[['avg_price_per_kg','Weight_Kg']]
-    model_test = feature_vector_df.loc[feature_vector_df['Commodities'] == 'APPLE GOLDEN DELICIOUS']
+  
+    #once again creating a copy
+    fin_test = df_test.loc[df_test['Commodities'] == 'APPLE GOLDEN DELICIOUS'].copy()
 
-    model_test = model_test.drop('Commodities',axis=1)
+    #dropping unnecessary column
+    fin_test = fin_test.drop('Commodities',axis=1)
 
-    #model_test = model_test.drop('Province',axis=1)
-    model_test =  pd.get_dummies(model_test, drop_first = True, columns=['Province'])
-    #model_test = model_test.drop('Size_Grade',axis=1)
-    model_test =  pd.get_dummies(model_test, drop_first = True, columns=['Size_Grade'])
-    #model_test = model_test.drop('Container',axis=1)
-    model_test =  pd.get_dummies(model_test, drop_first = True, columns=['Container'])
+    #converting categorical features to dummy variables
+    fin_test =  pd.get_dummies(fin_test, drop_first = True, columns=['Province'])
+    fin_test =  pd.get_dummies(fin_test, drop_first = True, columns=['Size_Grade'])
+    fin_test =  pd.get_dummies(fin_test, drop_first = True, columns=['Container'])
 
-    model_test['Month'] = pd.DatetimeIndex(model_test['Date']).month
-    model_test = model_test.drop('Date',axis=1)
+    #creating month column from 'Date' column
+    fin_test['Month'] = pd.DatetimeIndex(fin_test['Date']).month
 
-    model_test["Harvest_Season"] = model_test["Month"].astype(str)
-    model_test["Harvest_Season"].replace({"1": "No", "2": "Yes", "12" : "No", "3" : "Yes", "4" : "No", "5" : "No", "6" : "No", "7": "No", "8" : "No", "9" : "No", "10" : "No", "11" : "No"}, inplace=True)
-    model_test =  pd.get_dummies(model_test, drop_first = True, columns=['Harvest_Season'])
-    model_test = model_test.drop('Index',axis=1)
+    #dropping 'Date' column
+    fin_test = fin_test.drop('Date',axis=1)
+
+    #creating 'Harvest_Season' column with the same steps as the training dataset
+    fin_test["Harvest_Season"] = fin_test["Month"].astype(str)
+    fin_test["Harvest_Season"].replace({"1": "No", "2": "Yes", "12" : "No", "3" : "Yes", "4" : "No", "5" : "No", "6" : "No", "7": "No", "8" : "No", "9" : "No", "10" : "No", "11" : "No"}, inplace=True)
+    fin_test =  pd.get_dummies(fin_test, drop_first = True, columns=['Harvest_Season'])
+
+    #dropping 'Index' row which is unique to the training set but will throw the number of features of if not dropped before training and testing
+    fin_test = fin_test.drop('Index',axis=1)
     
                                 
     # ------------------------------------------------------------------------
 
-    return model_test
+    return fin_test
 
 def load_model(path_to_model:str):
     """Adapter function to load our pretrained model into memory.

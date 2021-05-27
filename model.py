@@ -62,10 +62,10 @@ def _preprocess_data(data):
     # ---------------------------------------------------------------
 
     # ----------- Replace this code with your own preprocessing steps --------
-  
-    #once again creating a copy
-    fin_test = df_test.loc[df_test['Commodities'] == 'APPLE GOLDEN DELICIOUS'].copy()
-
+    feature_vector_df = feature_vector_df[(feature_vector_df['Commodities'] == 'APPLE GOLDEN DELICIOUS')]
+    
+    fin_test = feature_vector_df.copy()
+    
     #dropping unnecessary column
     fin_test = fin_test.drop('Commodities',axis=1)
 
@@ -88,10 +88,11 @@ def _preprocess_data(data):
     #dropping 'Index' row which is unique to the training set but will throw the number of features of if not dropped before training and testing
     fin_test = fin_test.drop('Index',axis=1)
     
-                                
+    predict_vector = fin_test
+   
     # ------------------------------------------------------------------------
 
-    return fin_test
+    return predict_vector
 
 def load_model(path_to_model:str):
     """Adapter function to load our pretrained model into memory.
